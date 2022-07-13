@@ -1,0 +1,6 @@
+AUTOMAKE_OPTIONS=foreign
+bin_PROGRAMS=test_file_block_digest
+test_file_block_digest_SOURCES=test_file_block_digest.cpp file_block_digest.cpp sha1.cpp
+
+lib_LIBRARIES=libfile_block_digest.a
+libfile_block_digest_a_SOURCES=file_block_digest.cpp sha1.cpp
