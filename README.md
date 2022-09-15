@@ -25,6 +25,6 @@ automake --add-missing
 make
 
 
-或直接使用g++编译得到 a.out 二进制工具
+或直接使用g++编译得到 test_file_block_digest 二进制工具
 
-g++ file_block_digest.h file_block_digest.cpp sha1.h sha1.cpp test_file_block_digest.cpp
+g++ -std=c++11 file_block_digest.h file_block_digest.cpp sha1.h sha1.cpp test_file_block_digest.cpp -o test_file_block_digest
