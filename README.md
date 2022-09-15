@@ -15,11 +15,16 @@
 sha1.* 可直接替换成其他sha1的实现，如openssl sha1。
 
 linux下执行以下命令，生成 test_file_block_digest 二进制工具
+
 aclocal
+
 automake --add-missing
+
 ./configure  CXX=g++ CPPFLAGS=-std=c++11
+
 make
 
 
 或直接使用g++编译得到 a.out 二进制工具
+
 g++ file_block_digest.h file_block_digest.cpp sha1.h sha1.cpp test_file_block_digest.cpp
