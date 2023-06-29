@@ -35,7 +35,7 @@ bda1e884e1cb23a5cbdea73d2e00e23baa72d2f5<br>
 ```
 特别注意，`size`和`block_sha`需要对应上。
 
-### 分块上传初始化
+### 分块上传每一块（多次调用）
 请求地址: https://qyapi.weixin.qq.com/cgi-bin/wedrive/file_upload_part?access_token=ACCESS_TOKEN
 
 ```json
