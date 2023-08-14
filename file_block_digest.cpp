@@ -56,7 +56,7 @@ static std::string SHA1Final(SHA_CTX* ctx) {
   return StrToHex((char *)tmp, SHA1_LENGTH);
 }
 
-int GetFileDigestInfo(const char* content, uint32_t content_size, FileDigestInfo* info) {
+int GetFileDigestInfo(const char* content, uint64_t content_size, FileDigestInfo* info) {
   if (content == NULL || content_size == 0) {
     return -1;
   }
@@ -64,9 +64,9 @@ int GetFileDigestInfo(const char* content, uint32_t content_size, FileDigestInfo
   SHA_CTX ctx;
   SHA1_Init(&ctx);
 
-  uint32_t i = 1;
+  uint64_t i = 1;
   uint64_t beg_offset = 0;
-  const uint32_t total_block = (content_size - 1) / SHA1_BLOCK_SIZE + 1;
+  const uint64_t total_block = (content_size - 1) / SHA1_BLOCK_SIZE + 1;
   for (; i <= total_block; ++i) {
     info->parts.push_back(BlockInfo());
     BlockInfo& part = info->parts.back();

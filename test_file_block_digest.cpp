@@ -31,25 +31,22 @@
 
 using namespace std;
 
-string Readfile(const string& file_path) {
+char* Readfile(const string& file_path, uint64_t& len) {
   ifstream file(file_path.c_str());
   if (!file.is_open()) {
-    return "";
+    return nullptr;
   }
-  int len;
   file.seekg(0, ios::end);
   len = file.tellg();
   file.seekg(0, ios::beg);
   if (len == 0) {
     file.close();
-    return "";
+    return nullptr;
   }
   char *buf = new char[len];
   file.read(buf, len);
   file.close();
-  string content(buf, len);
-  delete [] buf;
-  return content;
+  return buf;
 }
 
 int main(int argc, char* argv[]) {
@@ -57,10 +54,16 @@ int main(int argc, char* argv[]) {
     printf("Usage: %s <path>\n", argv[0]);
   }
 
-  string content = Readfile(argv[1]);
+  uint64_t len = 0;
+  char* buf = Readfile(argv[1], len);
+  if (!buf) {
+    printf("read fail\n");
+	return 0;
+  }
 
   file_block_digest::FileDigestInfo upload_info;
-  file_block_digest::GetFileDigestInfo(content.c_str(), content.size(), &upload_info);
+  // file_block_digest::GetFileDigestInfo(content.c_str(), content.size(), &upload_info);
+  file_block_digest::GetFileDigestInfo(buf, len, &upload_info);
 
   printf("blocks: %zd\n", upload_info.parts.size());
   for (size_t i = 0; i < upload_info.parts.size(); ++i) {
@@ -69,5 +72,8 @@ int main(int argc, char* argv[]) {
         part.part_num, part.end_offset, part.cumulate_sha1.c_str());
   }
 
+  if (buf) {
+    delete[] buf;
+  }
   return 0;
 }

@@ -31,7 +31,7 @@ namespace file_block_digest {
 struct BlockInfo {
   BlockInfo() {}
 
-  uint32_t part_num;  // 当前块序号，从1开始
+  uint64_t part_num;  // 当前块序号，从1开始
   uint64_t end_offset;  // 当前块结尾在文件中的下标
   std::string cumulate_sha1;  // 当前累积sha1
 };
@@ -42,6 +42,6 @@ struct FileDigestInfo {
   std::vector<BlockInfo> parts;
 };
 
-int GetFileDigestInfo(const char* content, uint32_t content_size, FileDigestInfo* info);
+int GetFileDigestInfo(const char* content, uint64_t content_size, FileDigestInfo* info);
 
 }  // namespace file_block_digest
