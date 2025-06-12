@@ -31,24 +31,49 @@
 
 using namespace std;
 
-char* Readfile(const string& file_path, uint64_t& len) {
-  ifstream file(file_path.c_str());
+char* Readfile(const std::string& file_path, uint64_t& len) {
+  std::ifstream file(file_path.c_str(), std::ios::binary);
   if (!file.is_open()) {
-    return nullptr;
+      std::cerr << "Failed to open file: " << file_path << std::endl;
+      return nullptr;
   }
-  file.seekg(0, ios::end);
+
+  file.seekg(0, std::ios::end);
   len = file.tellg();
-  file.seekg(0, ios::beg);
-  if (len == 0) {
-    file.close();
-    return nullptr;
+  if (len <= 0) {
+      std::cerr << "File is empty or invalid size: " << file_path << std::endl;
+      file.close();
+      return nullptr;
   }
-  char *buf = new char[len];
-  file.read(buf, len);
+
+  file.seekg(0, std::ios::beg);
+
+  const uint64_t chunk_size = 1024 * 1024; // 1MB per chunk
+  uint64_t remaining = len;
+  char* buf = new (std::nothrow) char[len];
+  if (!buf) {
+      std::cerr << "Memory allocation failed for file: " << file_path << std::endl;
+      file.close();
+      return nullptr;
+  }
+
+  char* current_pos = buf;
+  while (remaining > 0) {
+      uint64_t read_size = std::min(chunk_size, remaining);
+      file.read(current_pos, read_size);
+      if (file.gcount() != read_size) {
+          std::cerr << "Failed to read complete file content: " << file_path << std::endl;
+          file.close();
+          delete[] buf;
+          return nullptr;
+      }
+      current_pos += read_size;
+      remaining -= read_size;
+  }
+
   file.close();
   return buf;
 }
-
 int main(int argc, char* argv[]) {
   if (argc < 2) {
     printf("Usage: %s <path>\n", argv[0]);

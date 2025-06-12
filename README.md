@@ -28,3 +28,7 @@ make
 或直接使用g++编译得到 test_file_block_digest 二进制工具
 
 g++ -std=c++11 file_block_digest.h file_block_digest.cpp sha1.h sha1.cpp test_file_block_digest.cpp -o test_file_block_digest
+
+Windows下执行以下命令可以将test_file_block_digest.cpp编译为exe可执行文件
+
+g++ -static test_file_block_digest.cpp file_block_digest.cpp sha1.cpp -o test_file_block_digest.exe

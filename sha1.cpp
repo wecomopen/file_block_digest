@@ -24,6 +24,7 @@
 #include "sha1.h"
 
 #include <string.h>
+#include <stdint.h>
 
 namespace file_block_digest {
 #define rol(value, bits) (((value) << (bits)) | ((value) >> (32 - (bits))))
@@ -57,11 +58,11 @@ namespace file_block_digest {
   w = rol(w, 30);
 char const hex_chars[16] = {'0', '1', '2', '3', '4', '5', '6', '7',
                             '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-void SHA1Transform(u_int32_t state[5], const unsigned char buffer[64]) {
-  u_int32_t a, b, c, d, e;
+void SHA1Transform(uint32_t state[5], const unsigned char buffer[64]) {
+  uint32_t a, b, c, d, e;
   typedef union {
     unsigned char c[64];
-    u_int32_t l[16];
+    uint32_t l[16];
   } CHAR64LONG16;
   CHAR64LONG16 block[1];
   memcpy(block, buffer, 64);
@@ -166,8 +167,8 @@ void SHA1_Init(SHA_CTX* context) {
   context->state[4] = 0xC3D2E1F0;
   context->count[0] = context->count[1] = 0;
 }
-void SHA1_Update(SHA_CTX* context, const unsigned char* data, u_int32_t len) {
-  u_int32_t i, j;
+void SHA1_Update(SHA_CTX* context, const unsigned char* data, uint32_t len) {
+  uint32_t i, j;
   j = context->count[0];
   if ((context->count[0] += len << 3) < j) context->count[1]++;
   context->count[1] += (len >> 29);
